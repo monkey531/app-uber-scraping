@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Alert, Dimensions } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
-import { mockRequests } from './mock';
-import { RequestStatus, RequestData } from './types';
+import { mockRequests } from '@/utils/mock';
+import { RequestStatus, RequestData } from '@/utils/types';
 import { Link, useLocalSearchParams } from 'expo-router';
 import * as Location from 'expo-location';
 
@@ -13,8 +13,8 @@ const { width, height } = Dimensions.get('window');
 const INITIAL_REGION = {
   latitude: 40.75,
   longitude: -73.97,
-  latitudeDelta: 0.1,
-  longitudeDelta: 0.1,
+  latitudeDelta: 0,
+  longitudeDelta: 0,
 };
 
 export default function MapScreen() {
@@ -162,160 +162,141 @@ export default function MapScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        initialRegion={INITIAL_REGION}
-        showsUserLocation={true}
-        showsMyLocationButton={true}
-        followsUserLocation={true}
-        customMapStyle={[
-          {
-            "elementType": "geometry",
-            "stylers": [{"color": "#f5f5f5"}]
-          },
-          {
-            "elementType": "labels.text.stroke",
-            "stylers": [{"color": "#f5f5f5"}]
-          },
-          {
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#616161"}]
-          },
-          {
-            "featureType": "administrative.locality",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#757575"}]
-          },
-          {
-            "featureType": "poi",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#757575"}]
-          },
-          {
-            "featureType": "poi.park",
-            "elementType": "geometry",
-            "stylers": [{"color": "#e5e5e5"}]
-          },
-          {
-            "featureType": "poi.park",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#9e9e9e"}]
-          },
-          {
-            "featureType": "road",
-            "elementType": "geometry",
-            "stylers": [{"color": "#ffffff"}]
-          },
-          {
-            "featureType": "road.arterial",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#757575"}]
-          },
-          {
-            "featureType": "road.highway",
-            "elementType": "geometry",
-            "stylers": [{"color": "#dadada"}]
-          },
-          {
-            "featureType": "road.highway",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#616161"}]
-          },
-          {
-            "featureType": "road.local",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#9e9e9e"}]
-          },
-          {
-            "featureType": "transit.line",
-            "elementType": "geometry",
-            "stylers": [{"color": "#e5e5e5"}]
-          },
-          {
-            "featureType": "transit.station",
-            "elementType": "geometry",
-            "stylers": [{"color": "#eeeeee"}]
-          },
-          {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{"color": "#c9c9c9"}]
-          },
-          {
-            "featureType": "water",
-            "elementType": "labels.text.fill",
-            "stylers": [{"color": "#9e9e9e"}]
-          }
-        ]}
-      >
-        {/* Current location marker with accuracy circle */}
-        {currentLocation && (
-          <Marker
-            coordinate={{
-              latitude: currentLocation.coords.latitude,
-              longitude: currentLocation.coords.longitude,
-            }}
-          >
-            <View style={styles.currentLocationMarker}>
-              <View style={styles.currentLocationDot} />
-              <View style={[
-                styles.accuracyCircle,
-                {
-                  width: currentLocation.coords.accuracy || 20,
-                  height: currentLocation.coords.accuracy || 20,
-                  borderRadius: (currentLocation.coords.accuracy || 20) / 2,
-                }
-              ]} />
-            </View>
-          </Marker>
-        )}
-
-        {/* Request markers */}
-        {filteredRequests.map((request) => (
-          <React.Fragment key={request.id}>
+    <>
+      <View style={styles.container}>
+        <MapView
+          ref={mapRef}
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          initialRegion={INITIAL_REGION}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          followsUserLocation={true}
+          customMapStyle={[
+            {
+              "elementType": "geometry",
+              "stylers": [{ "color": "#f5f5f5" }]
+            },
+            {
+              "elementType": "labels.text.stroke",
+              "stylers": [{ "color": "#f5f5f5" }]
+            },
+            {
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#616161" }]
+            },
+            {
+              "featureType": "administrative.locality",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#757575" }]
+            },
+            {
+              "featureType": "poi",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#757575" }]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#e5e5e5" }]
+            },
+            {
+              "featureType": "poi.park",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#9e9e9e" }]
+            },
+            {
+              "featureType": "road",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#ffffff" }]
+            },
+            {
+              "featureType": "road.arterial",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#757575" }]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#dadada" }]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#616161" }]
+            },
+            {
+              "featureType": "road.local",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#9e9e9e" }]
+            },
+            {
+              "featureType": "transit.line",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#e5e5e5" }]
+            },
+            {
+              "featureType": "transit.station",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#eeeeee" }]
+            },
+            {
+              "featureType": "water",
+              "elementType": "geometry",
+              "stylers": [{ "color": "#c9c9c9" }]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text.fill",
+              "stylers": [{ "color": "#9e9e9e" }]
+            }
+          ]}
+        >
+          {/* Current location marker with accuracy circle */}
+          {currentLocation && (
             <Marker
-              coordinate={request.location.pickup}
-              onPress={() => setSelectedRequest(request)}
+              coordinate={{
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude,
+              }}
             >
-              <Animated.View
-                style={[
-                  styles.markerContainer,
+              <View style={styles.currentLocationMarker}>
+                <View style={styles.currentLocationDot} />
+                <View style={[
+                  styles.accuracyCircle,
                   {
-                    transform: [
-                      {
-                        scale:
-                          selectedRequest?.id === request.id
-                            ? markerScale
-                            : 1,
-                      },
-                    ],
-                  },
-                ]}
-              >
-                <View style={[styles.markerBackground, { backgroundColor: getMarkerColor(request.status) }]}>
-                  <Ionicons
-                    name="location"
-                    size={24}
-                    color="white"
-                  />
-                </View>
-              </Animated.View>
+                    width: currentLocation.coords.accuracy || 20,
+                    height: currentLocation.coords.accuracy || 20,
+                    borderRadius: (currentLocation.coords.accuracy || 20) / 2,
+                  }
+                ]} />
+              </View>
             </Marker>
+          )}
 
-            {selectedRequest?.id === request.id && (
-              <Marker coordinate={request.location.dropoff}>
+          {/* Request markers */}
+          {filteredRequests.map((request) => (
+            <React.Fragment key={request.id}>
+              <Marker
+                coordinate={request.location.pickup}
+                onPress={() => setSelectedRequest(request)}
+              >
                 <Animated.View
                   style={[
                     styles.markerContainer,
                     {
-                      transform: [{ scale: markerScale }],
+                      transform: [
+                        {
+                          scale:
+                            selectedRequest?.id === request.id
+                              ? markerScale
+                              : 1,
+                        },
+                      ],
                     },
                   ]}
                 >
-                  <View style={styles.markerBackground}>
+                  <View style={[styles.markerBackground, { backgroundColor: getMarkerColor(request.status) }]}>
                     <Ionicons
                       name="location"
                       size={24}
@@ -324,69 +305,89 @@ export default function MapScreen() {
                   </View>
                 </Animated.View>
               </Marker>
-            )}
-          </React.Fragment>
-        ))}
-      </MapView>
 
-      {errorMsg && (
-        <Animated.View 
-          style={[
-            styles.errorContainer,
-            {
-              opacity: fadeAnim,
-              transform: [{
-                translateY: slideAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [-20, 0],
-                })
-              }]
-            }
-          ]}
-        >
-          <Text style={styles.errorText}>{errorMsg}</Text>
-        </Animated.View>
-      )}
+              {selectedRequest?.id === request.id && (
+                <Marker coordinate={request.location.dropoff}>
+                  <Animated.View
+                    style={[
+                      styles.markerContainer,
+                      {
+                        transform: [{ scale: markerScale }],
+                      },
+                    ]}
+                  >
+                    <View style={styles.markerBackground}>
+                      <Ionicons
+                        name="location"
+                        size={24}
+                        color="white"
+                      />
+                    </View>
+                  </Animated.View>
+                </Marker>
+              )}
+            </React.Fragment>
+          ))}
+        </MapView>
 
-      {selectedRequest && (
-        <Animated.View 
-          style={[
-            styles.requestInfo,
-            {
-              opacity: fadeAnim,
-              transform: [{
-                translateY: slideAnim.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [height, 0],
-                })
-              }]
-            }
-          ]}
-        >
-          <Text style={styles.guestName}>{selectedRequest.guestName}</Text>
-          <View style={styles.addressContainer}>
-            <Ionicons name="location" size={16} color="#666" />
-            <Text style={styles.address}>{selectedRequest.pickupAddress}</Text>
-          </View>
-          <View style={styles.addressContainer}>
-            <Ionicons name="location" size={16} color="#666" />
-            <Text style={styles.address}>{selectedRequest.dropoffAddress}</Text>
-          </View>
-          <View style={styles.infoRow}>
-            <View style={styles.infoItem}>
-              <Ionicons name="time" size={16} color="#666" />
-              <Text style={styles.infoText}>
-                {selectedRequest.requestTime.toLocaleTimeString()}
-              </Text>
+        {errorMsg && (
+          <Animated.View
+            style={[
+              styles.errorContainer,
+              {
+                opacity: fadeAnim,
+                transform: [{
+                  translateY: slideAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [-20, 0],
+                  })
+                }]
+              }
+            ]}
+          >
+            <Text style={styles.errorText}>{errorMsg}</Text>
+          </Animated.View>
+        )}
+
+        {selectedRequest && (
+          <Animated.View
+            style={[
+              styles.requestInfo,
+              {
+                opacity: fadeAnim,
+                transform: [{
+                  translateY: slideAnim.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [height, 0],
+                  })
+                }]
+              }
+            ]}
+          >
+            <Text style={styles.guestName}>{selectedRequest.guestName}</Text>
+            <View style={styles.addressContainer}>
+              <Ionicons name="location" size={16} color="#666" />
+              <Text style={styles.address}>{selectedRequest.pickupAddress}</Text>
             </View>
-            <View style={styles.infoItem}>
-              <Ionicons name="call" size={16} color="#666" />
-              <Text style={styles.infoText}>{selectedRequest.phoneNumber}</Text>
+            <View style={styles.addressContainer}>
+              <Ionicons name="location" size={16} color="#666" />
+              <Text style={styles.address}>{selectedRequest.dropoffAddress}</Text>
             </View>
-          </View>
-        </Animated.View>
-      )}
-
+            <View style={styles.infoRow}>
+              <View style={styles.infoItem}>
+                <Ionicons name="time" size={16} color="#666" />
+                <Text style={styles.infoText}>
+                  {selectedRequest.requestTime.toLocaleTimeString()}
+                </Text>
+              </View>
+              <View style={styles.infoItem}>
+                <Ionicons name="call" size={16} color="#666" />
+                <Text style={styles.infoText}>{selectedRequest.phoneNumber}</Text>
+              </View>
+            </View>
+          </Animated.View>
+        )}
+      </View>
       <View style={styles.tabBar}>
         <Link href="/" asChild>
           <Pressable style={styles.tab}>
@@ -397,7 +398,7 @@ export default function MapScreen() {
           <Text style={styles.activeTabText}>Map</Text>
         </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -522,7 +523,9 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     paddingVertical: 16,
-    alignItems: 'center',
+    alignItems: 'center',   
+    borderRadius: 8,
+    margin: 4,
   },
   activeTab: {
     backgroundColor: '#4CAF50',
