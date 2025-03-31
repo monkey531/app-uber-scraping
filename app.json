@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -20,7 +20,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.uberclone",
       "config": {
-        "googleMapsApiKey": "YOUR_IOS_API_KEY"
+        "googleMapsApiKey": "AIzaSyD7VnZ8xE15tj1VPZkPdxYhs51KxItnHUk"
       }
     },
     "android": {
@@ -31,7 +31,7 @@
       "package": "com.uberclone",
       "config": {
         "googleMaps": {
-          "apiKey": "YOUR_ANDROID_API_KEY"
+          "apiKey": "AIzaSyD7VnZ8xE15tj1VPZkPdxYhs51KxItnHUk"
         }
       },
       "permissions": [
@@ -40,7 +40,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/splash-icon.png"
     },
     "plugins": [
       [
